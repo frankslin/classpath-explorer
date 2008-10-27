@@ -22,8 +22,8 @@ public class CompositClassPathTest extends ClassPathTest {
 
 	@Override
 	protected ClassPath createClassPath() throws IOException {
-		DirectoryClassPath dirClassPath = new DirectoryClassPath(new File("test-data"));
-		JARClassPath jarClassPath = new JARClassPath(new File("test-data.jar"));
+	  ClassPath dirClassPath = new DirectoryClassPath(new File("test-data"));
+		ClassPath jarClassPath = new JARClassPath(new File("test-data.jar")).loadEntries();
 		return new CompositeClassPath(dirClassPath, jarClassPath);
 	}
 
