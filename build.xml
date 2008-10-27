@@ -66,7 +66,7 @@
 	</target>
 
 	<target name="dist" depends="test, revision">
-		<jar destfile="target/dist/SqqlJdbc-r${revision}.jar">
+		<jar destfile="target/dist/classpath-explorer-r${revision}.jar">
 			<fileset dir="target/bin" />
 		</jar>
 	</target>
