@@ -1,0 +1,11 @@
+<project>
+
+	<target name="createTestJAR">
+		<jar destfile="test-data.jar">
+			<fileset dir="test-data">
+				<exclude name=".svn" />
+			</fileset>
+		</jar>
+	</target>
+
+</project>
