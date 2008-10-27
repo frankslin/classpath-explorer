@@ -42,7 +42,7 @@ public class DirectoryClassPath implements ClassPath {
 	}
 
 	public boolean isResource(String resource) {
-		return !resource.endsWith(File.separator) && getFile(resource).isFile();
+		return !resource.endsWith("/") && getFile(resource).isFile();
 	}
 
 	public boolean isPackage(String packageName) {
