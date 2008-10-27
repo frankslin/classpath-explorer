@@ -87,11 +87,11 @@ public abstract class ClassPathTest extends TestCase {
 	}
 
 	public void testReadResource() throws Exception {
-		assertEquals("FILE1", read(path.getResourceInputStream("A/file1")));
-		assertEquals("FILE1", read(path.getResourceInputStream("/A/file1")));
-		assertNull(path.getResourceInputStream("A/file1/"));
-		assertNull(path.getResourceInputStream("/A/file1/"));
-		assertNull(path.getResourceInputStream("NON_EXISTANT"));
+		assertEquals("FILE1", read(path.getResourceAsStream("A/file1")));
+		assertEquals("FILE1", read(path.getResourceAsStream("/A/file1")));
+		assertNull(path.getResourceAsStream("A/file1/"));
+		assertNull(path.getResourceAsStream("/A/file1/"));
+		assertNull(path.getResourceAsStream("NON_EXISTANT"));
 	}
 
 }

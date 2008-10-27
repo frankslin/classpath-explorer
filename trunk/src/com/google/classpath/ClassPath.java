@@ -15,7 +15,6 @@
  */
 package com.google.classpath;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 public interface ClassPath {
@@ -26,7 +25,7 @@ public interface ClassPath {
 
 	String[] listPackages(String string);
 
-	InputStream getResourceInputStream(String resource) throws IOException;
+	InputStream getResourceAsStream(String resource);
 
 	String[] listResources(String packageName);
 

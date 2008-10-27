@@ -18,7 +18,7 @@ package com.google.classpath;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class DirectoryClassPath implements ClassPath {
@@ -71,11 +71,14 @@ public class DirectoryClassPath implements ClassPath {
 		return listNames(packageName, new FileFileFilter());
 	}
 
-	public InputStream getResourceInputStream(String resource)
-			throws IOException {
+	public InputStream getResourceAsStream(String resource) {
 		if (isResource(resource))
-			return new FileInputStream(getFile(resource));
-		else
+      try {
+        return new FileInputStream(getFile(resource));
+      } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    else
 			return null;
 	}
 

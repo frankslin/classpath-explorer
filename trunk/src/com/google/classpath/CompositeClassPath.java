@@ -17,7 +17,6 @@ package com.google.classpath;
 
 import static java.util.Arrays.asList;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -63,10 +62,9 @@ public class CompositeClassPath implements ClassPath {
 		return (String[]) resources.toArray(new String[resources.size()]);
 	}
 	
-	public InputStream getResourceInputStream(String resource)
-			throws IOException {
+	public InputStream getResourceAsStream(String resource) {
 		for (ClassPath classPath : classPaths) {
-			InputStream is = classPath.getResourceInputStream(resource);
+			InputStream is = classPath.getResourceAsStream(resource);
 			if (is != null)
 				return is;
 		}
