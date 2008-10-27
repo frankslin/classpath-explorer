@@ -25,7 +25,7 @@ public class DirectoryClassPath implements ClassPath {
 
 	public static class DirectoryFilter implements FileFilter {
 		public boolean accept(File dir) {
-			return dir.isDirectory();
+			return dir.isDirectory() && !dir.getName().equals(".svn");
 		}
 	}
 
