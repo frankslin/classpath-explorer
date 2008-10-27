@@ -125,15 +125,19 @@ public class JARClassPath implements ClassPath {
 		return (String[]) resources.toArray(new String[resources.size()]);
 	}
 
-	public InputStream getResourceInputStream(String resource)
-			throws IOException {
+	public InputStream getResourceAsStream(String resource) {
 		while (resource.startsWith("/")) {
 			resource = resource.substring(1);
 		}
 		ZipEntry entry = jarFile.getEntry(resource);
-		if (entry == null)
-			return null;
-		else
-			return jarFile.getInputStream(entry);
+		if (entry == null) {
+      return null;
+    } else {
+      try {
+        return jarFile.getInputStream(entry);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
 	}
 }
