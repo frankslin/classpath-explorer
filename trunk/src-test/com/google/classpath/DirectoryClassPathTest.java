@@ -16,6 +16,7 @@
 package com.google.classpath;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class DirectoryClassPathTest extends ClassPathTest {
 
@@ -23,5 +24,11 @@ public class DirectoryClassPathTest extends ClassPathTest {
 	protected ClassPath createClassPath() {
 		return new DirectoryClassPath(new File("test-data"));
 	}
+	
+	public void testNonExistantDirectory() throws Exception {
+    DirectoryClassPath classPath = new DirectoryClassPath(new File("NON_EXISTENT"));
+    assertTrue(Arrays.equals(new String[0], classPath.listPackages("NON_EXISTENT")));
+    assertTrue(Arrays.equals(new String[0], classPath.listResources("NON_EXISTENT")));
+  }
 
 }

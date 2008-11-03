@@ -60,6 +60,9 @@ public class DirectoryClassPath implements ClassPath {
 	private String[] listNames(String packageName, FileFilter filter) {
 		File packageFile = getFile(packageName);
 		File[] directories = packageFile.listFiles(filter);
+		if (directories == null) {
+		  directories = new File[0];
+		}
 		String[] names = new String[directories.length];
 		for (int i = 0; i < directories.length; i++) {
 			names[i] = directories[i].getName();
