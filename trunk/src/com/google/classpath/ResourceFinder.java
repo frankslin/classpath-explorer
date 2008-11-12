@@ -35,6 +35,9 @@ public class ResourceFinder {
 
   private void findResources(SortedSet<String> resources,
       String rootPackageName, ResourceFilter resourceFilter, TreeSet<String> visitedPackages) {
+    if (rootPackageName.startsWith("/")) {
+      rootPackageName = rootPackageName.substring(1);
+    }
     if (visitedPackages.contains(rootPackageName)) {
       return;
     }
