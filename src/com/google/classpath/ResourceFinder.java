@@ -29,15 +29,19 @@ public class ResourceFinder {
   public String[] findResources(String rootPackageName,
       ResourceFilter resourceFilter) {
     SortedSet<String> resources = new TreeSet<String>();
-    findResources(resources, rootPackageName, resourceFilter);
+    findResources(resources, rootPackageName, resourceFilter, new TreeSet<String>());
     return (String[]) resources.toArray(new String[resources.size()]);
   }
 
   private void findResources(SortedSet<String> resources,
-      String rootPackageName, ResourceFilter resourceFilter) {
+      String rootPackageName, ResourceFilter resourceFilter, TreeSet<String> visitedPackages) {
+    if (visitedPackages.contains(rootPackageName)) {
+      return;
+    }
+    visitedPackages.add(rootPackageName);
     for (String packageName : classPath.listPackages(rootPackageName)) {
       findResources(resources, rootPackageName + "/" + packageName,
-          resourceFilter);
+          resourceFilter, visitedPackages);
     }
     for (String resourceName : classPath.listResources(rootPackageName)) {
       if (resourceFilter.match(rootPackageName, resourceName)) {
