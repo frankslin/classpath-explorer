@@ -20,8 +20,6 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class DirectoryClassPath implements ClassPath {
 
