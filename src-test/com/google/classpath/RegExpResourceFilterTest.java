@@ -15,21 +15,16 @@
  */
 package com.google.classpath;
 
-import java.io.InputStream;
+import static com.google.classpath.RegExpResourceFilter.ANY;
+import junit.framework.TestCase;
 
-public interface ClassPath {
+public class RegExpResourceFilterTest extends TestCase {
 
-	boolean isResource(String resource);
-
-	boolean isPackage(String packageName);
-
-	String[] listPackages(String string);
-
-	InputStream getResourceAsStream(String resource);
-
-	String[] listResources(String packageName);
-
-  String[] findResources(String rootPackageName,
-      ResourceFilter resourceFilter);
-
+  public void testMatchPackage() throws Exception {
+    assertFalse(new RegExpResourceFilter("match", ANY).match("X", "X"));
+    assertTrue(new RegExpResourceFilter("match", ANY).match("match", "X"));
+    assertTrue(new RegExpResourceFilter(ANY, ANY).match("X", "X"));
+    assertTrue(new RegExpResourceFilter("match", "match").match("match", "match"));
+  }
+  
 }

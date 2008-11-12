@@ -140,4 +140,9 @@ public class JARClassPath implements ClassPath {
       }
     }
 	}
+
+  public String[] findResources(String rootPackageName,
+      ResourceFilter resourceFilter) {
+    return new ResourceFinder(this).findResources(rootPackageName, resourceFilter);
+  }
 }

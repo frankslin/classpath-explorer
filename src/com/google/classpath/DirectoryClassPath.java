@@ -20,6 +20,8 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class DirectoryClassPath implements ClassPath {
 
@@ -84,5 +86,10 @@ public class DirectoryClassPath implements ClassPath {
     else
 			return null;
 	}
+
+  public String[] findResources(String rootPackageName,
+      ResourceFilter resourceFilter) {
+    return new ResourceFinder(this).findResources(rootPackageName, resourceFilter);
+  }
 
 }

@@ -15,6 +15,7 @@
  */
 package com.google.classpath;
 
+import static com.google.classpath.RegExpResourceFilter.ANY;
 import static java.util.Arrays.asList;
 
 import java.io.IOException;
@@ -52,10 +53,10 @@ public abstract class ClassPathTest extends TestCase {
 	}
 
 	public void testCheckForResource() throws Exception {
-		assertTrue(path.isResource("A/file1"));
-		assertTrue(path.isResource("/A/file1"));
-		assertFalse(path.isResource("/A/file1/"));
-		assertTrue(path.isResource("/A/file2"));
+		assertTrue(path.isResource("A/1.file"));
+		assertTrue(path.isResource("/A/1.file"));
+		assertFalse(path.isResource("/A/1.file/"));
+		assertTrue(path.isResource("/A/2.file"));
 		assertFalse(path.isResource("NON_EXISTANT"));
 		assertFalse(path.isResource("A"));
 		assertFalse(path.isResource("/A"));
@@ -81,16 +82,22 @@ public abstract class ClassPathTest extends TestCase {
 	public void testListResources() throws Exception {
 		assertArrayEquals(path.listResources(""));
 		assertArrayEquals(path.listResources("/"));
-		assertArrayEquals(path.listResources("A"), "file1", "file2");
-		assertArrayEquals(path.listResources("/A"), "file1", "file2");
-		assertArrayEquals(path.listResources("/A/"), "file1", "file2");
+		assertArrayEquals(path.listResources("A"), "1.file", "2.file");
+		assertArrayEquals(path.listResources("/A"), "1.file", "2.file");
+		assertArrayEquals(path.listResources("/A/"), "1.file", "2.file");
+	}
+
+	public void testFindResources() throws Exception {
+    RegExpResourceFilter anyFile = new RegExpResourceFilter(ANY, ".*\\.file");
+    assertArrayEquals(path.findResources("X", anyFile));
+    assertArrayEquals(path.findResources("A", anyFile), "A/1.file", "A/2.file", "A/B/3.file");
 	}
 
 	public void testReadResource() throws Exception {
-		assertEquals("FILE1", read(path.getResourceAsStream("A/file1")));
-		assertEquals("FILE1", read(path.getResourceAsStream("/A/file1")));
-		assertNull(path.getResourceAsStream("A/file1/"));
-		assertNull(path.getResourceAsStream("/A/file1/"));
+		assertEquals("FILE1", read(path.getResourceAsStream("A/1.file")));
+		assertEquals("FILE1", read(path.getResourceAsStream("/A/1.file")));
+		assertNull(path.getResourceAsStream("A/1.file/"));
+		assertNull(path.getResourceAsStream("/A/1.file/"));
 		assertNull(path.getResourceAsStream("NON_EXISTANT"));
 	}
 
