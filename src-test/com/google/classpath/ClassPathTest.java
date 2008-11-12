@@ -90,7 +90,7 @@ public abstract class ClassPathTest extends TestCase {
 	public void testFindResources() throws Exception {
     RegExpResourceFilter anyFile = new RegExpResourceFilter(ANY, ".*\\.file");
     assertArrayEquals(path.findResources("X", anyFile));
-    assertArrayEquals(path.findResources("A", anyFile), "A/1.file", "A/2.file", "A/B/3.file");
+    assertArrayEquals(path.findResources("", anyFile), "A/1.file", "A/2.file", "A/B/3.file");
 	}
 
 	public void testReadResource() throws Exception {
