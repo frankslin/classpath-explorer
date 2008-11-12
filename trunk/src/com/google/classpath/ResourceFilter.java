@@ -15,21 +15,8 @@
  */
 package com.google.classpath;
 
-import java.io.InputStream;
-
-public interface ClassPath {
-
-	boolean isResource(String resource);
-
-	boolean isPackage(String packageName);
-
-	String[] listPackages(String string);
-
-	InputStream getResourceAsStream(String resource);
-
-	String[] listResources(String packageName);
-
-  String[] findResources(String rootPackageName,
-      ResourceFilter resourceFilter);
+public interface ResourceFilter {
+  
+  boolean match(String packageName, String resourceName);
 
 }

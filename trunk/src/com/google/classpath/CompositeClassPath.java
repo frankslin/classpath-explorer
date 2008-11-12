@@ -71,4 +71,13 @@ public class CompositeClassPath implements ClassPath {
 		return null;
 	}
 
+  public String[] findResources(String rootPackageName,
+      ResourceFilter resourceFilter) {
+    SortedSet<String> resources = new TreeSet<String>();
+    for (ClassPath classPath : classPaths) {
+      resources.addAll(asList(classPath.findResources(rootPackageName, resourceFilter)));
+    }
+    return (String[]) resources.toArray(new String[resources.size()]);
+  }
+
 }
