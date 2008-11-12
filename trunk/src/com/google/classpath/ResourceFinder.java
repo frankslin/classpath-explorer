@@ -36,11 +36,16 @@ public class ResourceFinder {
   private void findResources(SortedSet<String> resources,
       String rootPackageName, ResourceFilter resourceFilter) {
     for (String packageName : classPath.listPackages(rootPackageName)) {
-      findResources(resources, rootPackageName + "/" + packageName, resourceFilter);
+      findResources(resources, rootPackageName + "/" + packageName,
+          resourceFilter);
     }
     for (String resourceName : classPath.listResources(rootPackageName)) {
       if (resourceFilter.match(rootPackageName, resourceName)) {
-        resources.add(rootPackageName + "/" + resourceName);
+        String name = rootPackageName + "/" + resourceName;
+        if (name.startsWith("/")) {
+          name = name.substring(1);
+        }
+        resources.add(name);
       }
     }
   }
