@@ -66,13 +66,9 @@ public class ClassPathFactoryTest extends TestCase {
 		assertNotNull(path);
 	}
 
-	public void testIllegalPathCausesException() throws Exception {
-		try {
-			factory.createFromPath("X-ABC-X");
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertTrue(e.toString().contains("X-ABC-X"));
-		}
+	public void testIllegalPathIsIgnored() throws Exception {
+	  factory.createFromPath("X-ABC-X");
+	  // no exception
 	}
 
 	public void testCreateFromPaths() throws Exception {

@@ -15,8 +15,6 @@
  */
 package com.google.classpath;
 
-import static java.lang.String.format;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,20 +43,17 @@ public class ClassPathFactory {
 		ArrayList<ClassPath> classPaths = new ArrayList<ClassPath>();
 		for (String path : paths) {
 			File file = new File(path);
-			ClassPath classPath;
-			if (file.isFile()) {
+      if (file.isFile()) {
 				try {
-					classPath = new JARClassPath(file).loadEntries();
+	        classPaths.add(new JARClassPath(file).loadEntries());
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
 			} else if (file.isDirectory()) {
-				classPath = new DirectoryClassPath(file);
+	      classPaths.add(new DirectoryClassPath(file));
 			} else {
-				throw new IllegalArgumentException(format(
-						"ClassPath '%s' does not exist.", file));
+			  //ignore since that is what JVM does.
 			}
-			classPaths.add(classPath);
 		}
 		ClassPath[] array = new ClassPath[classPaths.size()];
 		array = (ClassPath[]) classPaths.toArray(array);
