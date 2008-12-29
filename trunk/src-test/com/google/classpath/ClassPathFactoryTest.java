@@ -22,25 +22,39 @@ import junit.framework.TestCase;
 public class ClassPathFactoryTest extends TestCase {
 
 	private ClassPathFactory factory = new ClassPathFactory();
-	private String bin;
-	private String binTest;
+  private String bin;
+  private String binTest;
+  private String binName;
+  private String binTestName;
 
 	@Override
 	protected void setUp() throws Exception {
 		String[] paths = factory.parseClasspath(factory.getJVMClasspath());
 		for (String path : paths) {
-			if (path.endsWith("bin"))
-				bin = path;
-			if (path.endsWith("bin-test"))
-				binTest = path;
+      if (path.endsWith("/bin")) {
+        bin = path;
+        binName = "bin";
+      }
+      if (path.endsWith("/bin-test")) {
+        binTest = path;
+        binTestName = "bin-test";
+      }
+      if (path.endsWith("/test-classes")) {
+        binTest = path;
+        binTestName = "test-classes";
+      }
+      if (path.endsWith("/classes")) {
+        bin = path;
+        binName = "classes";
+      }
 		}
 	}
 
 	public void testReadJVMClasspath() throws Exception {
 		String classpath = factory.getJVMClasspath();
 		assertEquals(System.getProperty("java.class.path"), classpath);
-		assertTrue(classpath.contains("bin"));
-		assertTrue(classpath.contains("bin-test"));
+		assertTrue(classpath.contains(binName));
+		assertTrue(classpath.contains(binTestName));
 	}
 
 	public void testParseClasspath() throws Exception {
@@ -48,8 +62,8 @@ public class ClassPathFactoryTest extends TestCase {
 		boolean bin = false;
 		boolean binTest = false;
 		for (String path : paths) {
-			bin = bin || path.endsWith("bin");
-			binTest = binTest || path.endsWith("bin-test");
+			bin = bin || path.endsWith(binName);
+			binTest = binTest || path.endsWith(binTestName);
 		}
 		assertTrue(bin);
 		assertTrue(binTest);
