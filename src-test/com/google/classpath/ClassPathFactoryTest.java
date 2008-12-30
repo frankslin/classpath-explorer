@@ -15,6 +15,8 @@
  */
 package com.google.classpath;
 
+import static java.io.File.separator;
+
 import java.io.File;
 
 import junit.framework.TestCase;
@@ -35,15 +37,15 @@ public class ClassPathFactoryTest extends TestCase {
         bin = path;
         binName = "bin";
       }
-      if (path.endsWith("/bin-test")) {
+      if (path.endsWith(separator + "bin-test")) {
         binTest = path;
         binTestName = "bin-test";
       }
-      if (path.endsWith("/test-classes")) {
+      if (path.endsWith(separator + "test-classes")) {
         binTest = path;
         binTestName = "test-classes";
       }
-      if (path.endsWith("/classes")) {
+      if (path.endsWith(separator + "classes")) {
         bin = path;
         binName = "classes";
       }
