@@ -33,7 +33,7 @@ public class ClassPathFactoryTest extends TestCase {
 	protected void setUp() throws Exception {
 		String[] paths = factory.parseClasspath(factory.getJVMClasspath());
 		for (String path : paths) {
-      if (path.endsWith("/bin")) {
+      if (path.endsWith(separator + "bin")) {
         bin = path;
         binName = "bin";
       }
