@@ -33,26 +33,27 @@ public class ClassPathFactoryTest extends TestCase {
 	protected void setUp() throws Exception {
 		String[] paths = factory.parseClasspath(factory.getJVMClasspath());
 		for (String path : paths) {
-      if (path.endsWith(separator + "bin")) {
-        bin = path;
-        binName = "bin";
-      }
-      if (path.endsWith(separator + "bin-test")) {
-        binTest = path;
-        binTestName = "bin-test";
-      }
-      if (path.endsWith(separator + "test-classes")) {
-        binTest = path;
-        binTestName = "test-classes";
-      }
-      if (path.endsWith(separator + "classes")) {
-        bin = path;
-        binName = "classes";
+      File pathFile = new File(path);
+      if (pathFile.exists() && pathFile.isDirectory()) {
+        if (new File(pathFile, pathOfClass(ClassPathFactory.class)).exists()) {
+          bin = path;
+          binName = path.substring(path.lastIndexOf(separator));
+        }
+        else if (new File(pathFile, pathOfClass(this.getClass())).exists()) {
+          binTest = path;
+          binTestName = path.substring(path.lastIndexOf(separator));
+        }
       }
 		}
+    assertNotNull(bin);
+    assertNotNull(binName);
 	}
 
-	public void testReadJVMClasspath() throws Exception {
+  private String pathOfClass(Class<?> aClass) {
+    return aClass.getName().replaceAll("\\.", separator) + ".class";
+  }
+
+  public void testReadJVMClasspath() throws Exception {
 		String classpath = factory.getJVMClasspath();
 		assertEquals(System.getProperty("java.class.path"), classpath);
 		assertTrue(classpath.contains(binName));
