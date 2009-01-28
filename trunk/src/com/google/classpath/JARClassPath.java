@@ -24,9 +24,11 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 
 public class JARClassPath implements ClassPath {
 
@@ -38,13 +40,19 @@ public class JARClassPath implements ClassPath {
 	private final File file;
 	private final Package root = new Package();
 	private JarFile jarFile;
+  private static final Logger logger = Logger.getLogger(JARClassPath.class.getCanonicalName());
 
 	public JARClassPath(File jarFile) {
 		this.file = jarFile;
 	}
 
 	public ClassPath loadEntries() throws IOException {
-		jarFile = new JarFile(file);
+        try {
+		    jarFile = new JarFile(file);
+        } catch (ZipException e) {
+            logger.warning("Failed to read Jar file " + file.getAbsolutePath());
+            throw e;
+        }
 		Enumeration<JarEntry> enumeration = jarFile.entries();
 		while (enumeration.hasMoreElements()) {
 			JarEntry entry = enumeration.nextElement();
