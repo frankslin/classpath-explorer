@@ -22,7 +22,7 @@
     <artifactId>google</artifactId>
     <version>1</version>
   </parent>
-  <groupId>com.google.classpath-explorer</groupId>
+  <groupId>com.google.code.classpath-explorer</groupId>
   <artifactId>classpath-explorer</artifactId>
   <packaging>jar</packaging>
   <name>Classpath explorer</name>
