@@ -50,7 +50,11 @@ public class ClassPathFactoryTest extends TestCase {
 	}
 
   private String pathOfClass(Class<?> aClass) {
-    return aClass.getName().replaceAll("\\.", separator) + ".class";
+    try {
+      return aClass.getName().replaceAll("\\.", separator) + ".class";
+    } catch (StringIndexOutOfBoundsException e) {
+      throw new RuntimeException("Failed to replace dots in " + aClass.getName(), e);
+    }
   }
 
   public void testReadJVMClasspath() throws Exception {
