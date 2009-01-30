@@ -16,6 +16,7 @@
 package com.google.classpath;
 
 import static java.io.File.separator;
+import static java.io.File.separatorChar;
 
 import java.io.File;
 
@@ -50,11 +51,7 @@ public class ClassPathFactoryTest extends TestCase {
 	}
 
   private String pathOfClass(Class<?> aClass) {
-    try {
-      return aClass.getName().replaceAll("\\.", separator) + ".class";
-    } catch (StringIndexOutOfBoundsException e) {
-      throw new RuntimeException("Failed to replace dots in " + aClass.getName(), e);
-    }
+    return aClass.getName().replace('.', separatorChar) + ".class";
   }
 
   public void testReadJVMClasspath() throws Exception {
