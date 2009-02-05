@@ -22,16 +22,16 @@
     <artifactId>google</artifactId>
     <version>1</version>
   </parent>
-  <groupId>com.google.code.classpath-explorer</groupId>
+  <groupId>com.google.classpath-explorer</groupId>
   <artifactId>classpath-explorer</artifactId>
   <packaging>jar</packaging>
   <name>Classpath explorer</name>
+  <description>Library which allows discovering classes at runtime</description>
   <version>1.0-SNAPSHOT</version>
   <url>http://code.google.com/p/classpath-explorer/</url>
   <scm>
     <connection>scm:svn:http://classpath-explorer.googlecode.com/svn/</connection>
     <developerConnection>scm:svn:https://classpath-explorer.googlecode.com/svn/</developerConnection>
-    <tag>HEAD</tag>
     <url>http://code.google.com/p/classpath-explorer/source/browse/</url>
   </scm>
   <build>
