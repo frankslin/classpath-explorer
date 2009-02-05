@@ -1,0 +1,73 @@
+<project default="build">
+
+	<typedef resource="com/googlecode/svntask/svntask.xml">
+		<classpath>
+			<fileset dir="lib/svn">
+				<include name="svnkit.jar" />
+				<include name="svntask.jar" />
+			</fileset>
+		</classpath>
+	</typedef>
+	
+	<target name="createTestJAR">
+		<jar destfile="test-data.jar">
+			<fileset dir="test-data">
+				<exclude name=".svn" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="init">
+		<mkdir dir="target/bin" />
+		<mkdir dir="target/bin-test" />
+		<mkdir dir="target/report/junit" />
+		<mkdir dir="target/dist" />
+	</target>
+
+	<target name="clean">
+		<delete dir="target" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="src" destdir="target/bin" debug="on" source="1.5" target="1.5"/>
+	</target>
+
+	<target name="compile-test" depends="compile, createTestJAR">
+		<javac srcdir="src-test" destdir="target/bin-test" debug="on" source="1.5" target="1.5">
+			<classpath location="target/bin" />
+			<classpath path="lib/junit.jar" />
+		</javac>
+	</target>
+
+	<target name="test" depends="compile-test">
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath location="target/bin" />
+			<classpath location="target/bin-test" />
+			<classpath path="lib/junit.jar" />
+
+			<formatter type="xml" usefile="true" />
+
+			<batchtest fork="yes" haltonfailure="false" todir="target/report/junit">
+				<fileset dir="src-test">
+					<include name="**/*Test.java" />
+					<exclude name="com/google/classpath/ClassPathTest.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="build" depends="clean,dist">
+	</target>
+
+	<target name="revision">
+		<svn>
+			<info path="." revisionProperty="revision" />
+		</svn>
+	</target>
+
+	<target name="dist" depends="test, revision">
+		<jar destfile="target/dist/classpath-explorer-r${revision}.jar">
+			<fileset dir="target/bin" />
+		</jar>
+	</target>
+</project>
