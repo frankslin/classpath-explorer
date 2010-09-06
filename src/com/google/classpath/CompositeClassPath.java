@@ -21,55 +21,54 @@ import java.io.InputStream;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-
 public class CompositeClassPath implements ClassPath {
 
-	private final ClassPath[] classPaths;
+  private final ClassPath[] classPaths;
 
-	public CompositeClassPath(ClassPath... classPaths) {
-		this.classPaths = classPaths;
-	}
+  public CompositeClassPath(ClassPath... classPaths) {
+    this.classPaths = classPaths;
+  }
 
-	public boolean isResource(String resource) {
-		for (ClassPath classPath : classPaths) {
-			if (classPath.isResource(resource))
-				return true;
-		}
-		return false;
-	}
+  public boolean isResource(String resource) {
+    for (ClassPath classPath : classPaths) {
+      if (classPath.isResource(resource))
+        return true;
+    }
+    return false;
+  }
 
-	public boolean isPackage(String packageName) {
-		for (ClassPath classPath : classPaths) {
-			if (classPath.isPackage(packageName))
-				return true;
-		}
-		return false;
-	}
+  public boolean isPackage(String packageName) {
+    for (ClassPath classPath : classPaths) {
+      if (classPath.isPackage(packageName))
+        return true;
+    }
+    return false;
+  }
 
-	public String[] listPackages(String packageName) {
-		SortedSet<String> packages = new TreeSet<String>();
-		for (ClassPath classPath : classPaths) {
-			packages.addAll(asList(classPath.listPackages(packageName)));
-		}
-		return (String[]) packages.toArray(new String[packages.size()]);
-	}
+  public String[] listPackages(String packageName) {
+    SortedSet<String> packages = new TreeSet<String>();
+    for (ClassPath classPath : classPaths) {
+      packages.addAll(asList(classPath.listPackages(packageName)));
+    }
+    return (String[]) packages.toArray(new String[packages.size()]);
+  }
 
-	public String[] listResources(String packageName) {
-		SortedSet<String> resources = new TreeSet<String>();
-		for (ClassPath classPath : classPaths) {
-			resources.addAll(asList(classPath.listResources(packageName)));
-		}
-		return (String[]) resources.toArray(new String[resources.size()]);
-	}
-	
-	public InputStream getResourceAsStream(String resource) {
-		for (ClassPath classPath : classPaths) {
-			InputStream is = classPath.getResourceAsStream(resource);
-			if (is != null)
-				return is;
-		}
-		return null;
-	}
+  public String[] listResources(String packageName) {
+    SortedSet<String> resources = new TreeSet<String>();
+    for (ClassPath classPath : classPaths) {
+      resources.addAll(asList(classPath.listResources(packageName)));
+    }
+    return (String[]) resources.toArray(new String[resources.size()]);
+  }
+  
+  public InputStream getResourceAsStream(String resource) {
+    for (ClassPath classPath : classPaths) {
+      InputStream is = classPath.getResourceAsStream(resource);
+      if (is != null)
+        return is;
+    }
+    return null;
+  }
 
   public String[] findResources(String rootPackageName,
       ResourceFilter resourceFilter) {

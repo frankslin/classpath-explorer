@@ -20,9 +20,9 @@ import java.io.IOException;
 
 public class JARClassPathTest extends ClassPathTest {
 
-	@Override
-	protected ClassPath createClassPath() throws IOException {
-		return new JARClassPath(new File("test-data.jar")).loadEntries();
-	}
+  @Override
+  protected ClassPath createClassPath() throws IOException {
+    return new JARClassPath(new File("test-data.jar")).loadEntries();
+  }
 
 }

@@ -26,15 +26,14 @@ public class ResourceFinder {
     this.classPath = classPath;
   }
 
-  public String[] findResources(String rootPackageName,
-      ResourceFilter resourceFilter) {
+  public String[] findResources(String rootPackageName, ResourceFilter resourceFilter) {
     SortedSet<String> resources = new TreeSet<String>();
     findResources(resources, rootPackageName, resourceFilter, new TreeSet<String>());
     return (String[]) resources.toArray(new String[resources.size()]);
   }
 
-  private void findResources(SortedSet<String> resources,
-      String rootPackageName, ResourceFilter resourceFilter, TreeSet<String> visitedPackages) {
+  private void findResources(SortedSet<String> resources, String rootPackageName,
+      ResourceFilter resourceFilter, TreeSet<String> visitedPackages) {
     if (rootPackageName.startsWith("/")) {
       rootPackageName = rootPackageName.substring(1);
     }
