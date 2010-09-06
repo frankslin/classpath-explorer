@@ -20,11 +20,11 @@ import java.io.IOException;
 
 public class CompositClassPathTest extends ClassPathTest {
 
-	@Override
-	protected ClassPath createClassPath() throws IOException {
-	  ClassPath dirClassPath = new DirectoryClassPath(new File("test-data"));
-		ClassPath jarClassPath = new JARClassPath(new File("test-data.jar")).loadEntries();
-		return new CompositeClassPath(dirClassPath, jarClassPath);
-	}
+  @Override
+  protected ClassPath createClassPath() throws IOException {
+    ClassPath dirClassPath = new DirectoryClassPath(new File("test-data"));
+    ClassPath jarClassPath = new JARClassPath(new File("test-data.jar")).loadEntries();
+    return new CompositeClassPath(dirClassPath, jarClassPath);
+  }
 
 }

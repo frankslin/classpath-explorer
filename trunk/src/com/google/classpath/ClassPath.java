@@ -19,17 +19,16 @@ import java.io.InputStream;
 
 public interface ClassPath {
 
-	boolean isResource(String resource);
+  boolean isResource(String resource);
 
-	boolean isPackage(String packageName);
+  boolean isPackage(String packageName);
 
-	String[] listPackages(String string);
+  String[] listPackages(String string);
 
-	InputStream getResourceAsStream(String resource);
+  InputStream getResourceAsStream(String resource);
 
-	String[] listResources(String packageName);
+  String[] listResources(String packageName);
 
-  String[] findResources(String rootPackageName,
-      ResourceFilter resourceFilter);
+  String[] findResources(String rootPackageName, ResourceFilter resourceFilter);
 
 }

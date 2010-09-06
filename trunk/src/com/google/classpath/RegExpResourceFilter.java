@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
 
 public class RegExpResourceFilter implements ResourceFilter {
 
-  private final Pattern packagePattern;
-  private final Pattern resourcePattern;
   public static final String ENDS_WITH_CLASS = ".*\\.class";
   public static final String ANY = ".*";
+  private final Pattern packagePattern;
+  private final Pattern resourcePattern;
 
   public RegExpResourceFilter(String packageRegExp, String resourceRegExp) {
     this(Pattern.compile(packageRegExp), Pattern.compile(resourceRegExp));

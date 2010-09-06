@@ -32,113 +32,76 @@ import java.util.zip.ZipException;
 
 public class JARClassPath implements ClassPath {
 
-	private static class Package {
-		private final Map<String, Package> packages = new TreeMap<String, Package>();
-		private final SortedSet<String> resources = new TreeSet<String>();
-	}
+  private static class Package {
+    private final Map<String, Package> packages = new TreeMap<String, Package>();
+    private final SortedSet<String> resources = new TreeSet<String>();
+  }
 
-	private final File file;
-	private final Package root = new Package();
-	private JarFile jarFile;
+  private final File file;
+  private final Package root = new Package();
+  private JarFile jarFile;
   private static final Logger logger = Logger.getLogger(JARClassPath.class.getCanonicalName());
 
-	public JARClassPath(File jarFile) {
-		this.file = jarFile;
-	}
+  public JARClassPath(File jarFile) {
+    this.file = jarFile;
+  }
 
-	public ClassPath loadEntries() throws IOException {
-        try {
-		    jarFile = new JarFile(file);
-        } catch (ZipException e) {
-            logger.warning("Failed to read Jar file " + file.getAbsolutePath());
-            throw e;
-        }
-		Enumeration<JarEntry> enumeration = jarFile.entries();
-		while (enumeration.hasMoreElements()) {
-			JarEntry entry = enumeration.nextElement();
-			String path = entry.getName();
-			if (entry.isDirectory()) {
-				addPackage(path);
-			} else {
-				addResource(path);
-			}
-		}
-		return this;
-	}
+  public ClassPath loadEntries() throws IOException {
+    try {
+      jarFile = new JarFile(file);
+    } catch (ZipException e) {
+      logger.warning("Failed to read Jar file " + file.getAbsolutePath());
+      throw e;
+    }
+    Enumeration<JarEntry> enumeration = jarFile.entries();
+    while (enumeration.hasMoreElements()) {
+      JarEntry entry = enumeration.nextElement();
+      String path = entry.getName();
+      if (entry.isDirectory()) {
+        addPackage(path);
+      } else {
+        addResource(path);
+      }
+    }
+    return this;
+  }
 
-	private Package addPackage(String path) {
-		String[] parts = path.split("/");
-		Package pkg = root;
-		for (int i = 0; i < parts.length; i++) {
-			String name = parts[i];
-			if (pkg.packages.containsKey(name)) {
-				pkg = pkg.packages.get(name);
-			} else {
-				Package newPkg = new Package();
-				pkg.packages.put(name, newPkg);
-				pkg = newPkg;
-			}
-		}
-		return pkg;
-	}
-	
-	private void addResource(String resource) {
-		int index = resource.lastIndexOf("/");
-		String path = index == -1 ? "" : resource.substring(0, index);
-		String name = index == -1 ? resource : resource.substring(index + 1);
-		Package pkg = addPackage(path);
-		pkg.resources.add(name);
-	}
+  public boolean isResource(String resource) {
+    int index = resource.lastIndexOf("/");
+    String path = index == -1 ? "" : resource.substring(0, index);
+    String name = index == -1 ? resource : resource.substring(index + 1);
+    Package pkg = getPackage(path);
+    return pkg != null && pkg.resources.contains(name);
+  }
 
+  public boolean isPackage(String packageName) {
+    return getPackage(packageName) != null;
+  }
 
-	public boolean isResource(String resource) {
-		int index = resource.lastIndexOf("/");
-		String path = index == -1 ? "" : resource.substring(0, index);
-		String name = index == -1 ? resource : resource.substring(index + 1);
-		Package pkg = getPackage(path);
-		return pkg != null && pkg.resources.contains(name);
-	}
+  public String[] listPackages(String packageName) {
+    Package pkg = getPackage(packageName);
+    if (pkg == null) {
+      return new String[0];
+    }
+    Set<String> packages = pkg.packages.keySet();
+    return (String[]) packages.toArray(new String[packages.size()]);
+  }
 
-	public boolean isPackage(String packageName) {
-		return getPackage(packageName) != null;
-	}
+  public String[] listResources(String packageName) {
+    Package pkg = getPackage(packageName);
+    if (pkg == null) {
+      return new String[0];
+    }
+    SortedSet<String> resources = pkg.resources;
+    return (String[]) resources.toArray(new String[resources.size()]);
+  }
 
-	private Package getPackage(String packageName) {
-		String[] parts = packageName.split("/");
-		Package pkg = root;
-		for (int i = 0; i < parts.length; i++) {
-			String name = parts[i];
-			if (name.equals(""))
-				continue;
-			pkg = pkg.packages.get(name);
-			if (pkg == null)
-				return null;
-		}
-		return pkg;
-	}
-
-	public String[] listPackages(String packageName) {
-		Package pkg = getPackage(packageName);
-		if (pkg == null)
-			return new String[0];
-		Set<String> packages = pkg.packages.keySet();
-		return (String[]) packages.toArray(new String[packages.size()]);
-	}
-
-	public String[] listResources(String packageName) {
-		Package pkg = getPackage(packageName);
-		if (pkg == null)
-			return new String[0];
-		SortedSet<String> resources = pkg.resources;
-		return (String[]) resources.toArray(new String[resources.size()]);
-	}
-
-	public InputStream getResourceAsStream(String resource) {
-		while (resource.startsWith("/")) {
-			resource = resource.substring(1);
-		}
-		ZipEntry entry = jarFile.getEntry(resource);
-		if (entry == null) {
+  public InputStream getResourceAsStream(String resource) {
+    while (resource.startsWith("/")) {
+      resource = resource.substring(1);
+    }
+    ZipEntry entry = jarFile.getEntry(resource);
+    if (entry == null) {
       return null;
     } else {
       try {
@@ -147,10 +110,50 @@ public class JARClassPath implements ClassPath {
         throw new RuntimeException(e);
       }
     }
-	}
+  }
 
-  public String[] findResources(String rootPackageName,
-      ResourceFilter resourceFilter) {
+  public String[] findResources(String rootPackageName, ResourceFilter resourceFilter) {
     return new ResourceFinder(this).findResources(rootPackageName, resourceFilter);
   }
+
+  private Package addPackage(String path) {
+    String[] parts = path.split("/");
+    Package pkg = root;
+    for (int i = 0; i < parts.length; i++) {
+      String name = parts[i];
+      if (pkg.packages.containsKey(name)) {
+        pkg = pkg.packages.get(name);
+      } else {
+        Package newPkg = new Package();
+        pkg.packages.put(name, newPkg);
+        pkg = newPkg;
+      }
+    }
+    return pkg;
+  }
+  
+  private void addResource(String resource) {
+    int index = resource.lastIndexOf("/");
+    String path = index == -1 ? "" : resource.substring(0, index);
+    String name = index == -1 ? resource : resource.substring(index + 1);
+    Package pkg = addPackage(path);
+    pkg.resources.add(name);
+  }
+
+  private Package getPackage(String packageName) {
+    String[] parts = packageName.split("/");
+    Package pkg = root;
+    for (int i = 0; i < parts.length; i++) {
+      String name = parts[i];
+      if (name.equals("")) {
+        continue;
+      }
+      pkg = pkg.packages.get(name);
+      if (pkg == null) {
+        return null;
+      }
+    }
+    return pkg;
+  }
+
 }

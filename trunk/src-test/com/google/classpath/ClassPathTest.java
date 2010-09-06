@@ -37,16 +37,6 @@ public abstract class ClassPathTest extends TestCase {
 
   abstract protected ClassPath createClassPath() throws IOException;
 
-  private String read(InputStream is) throws IOException {
-    StringBuilder buf = new StringBuilder();
-    int ch;
-    while ((ch = is.read()) != -1) {
-      buf.append((char) ch);
-    }
-    is.close();
-    return buf.toString();
-  }
-
   public void assertArrayEqualsAnyOrder(String[] actual, String... expected) {
     Set<String> expectedAsSet = new HashSet<String>(Arrays.asList(expected));
     assertEquals(
@@ -111,6 +101,16 @@ public abstract class ClassPathTest extends TestCase {
     assertNull(path.getResourceAsStream("A/1.file/"));
     assertNull(path.getResourceAsStream("/A/1.file/"));
     assertNull(path.getResourceAsStream("NON_EXISTANT"));
+  }
+
+  private String read(InputStream is) throws IOException {
+    StringBuilder buf = new StringBuilder();
+    int ch;
+    while ((ch = is.read()) != -1) {
+      buf.append((char) ch);
+    }
+    is.close();
+    return buf.toString();
   }
 
 }
